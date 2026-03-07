@@ -12,8 +12,15 @@ export class XWindow {
         this.width = 480;
         this.height = 320;
 
+        this.restoreX = this.x;
+        this.restoreY = this.y;
+        this.restoreWidth = this.width;
+        this.restoreHeight = this.height;
+
         this.active = false;
         this.closed = false;
+        this.minimized = false;
+        this.maximized = false;
     }
 
     moveTo(x, y) {

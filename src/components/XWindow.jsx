@@ -1,18 +1,8 @@
 import { useRef } from "react";
 
-const kResizeNone = "";
-const kResizeLeft = "left";
-const kResizeRight = "right";
-const kResizeTop = "top";
-const kResizeBottom = "bottom";
-const kResizeTopLeft = "top-left";
-const kResizeTopRight = "top-right";
-const kResizeBottomLeft = "bottom-left";
-const kResizeBottomRight = "bottom-right";
-
 const kMinWidth = 240;
 const kMinHeight = 140;
-const kEdgeSize = 6;
+const kTaskbarHeight = 36;
 
 export default function XWindow({ win, desktop, refresh }) {
     const dragRef = useRef(null);
@@ -23,11 +13,43 @@ export default function XWindow({ win, desktop, refresh }) {
         refresh();
     }
 
+    function handleMinimize() {
+        win.minimized = true;
+        refresh();
+    }
+
+    function handleToggleMaximize() {
+        if (!win.maximized) {
+            win.restoreX = win.x;
+            win.restoreY = win.y;
+            win.restoreWidth = win.width;
+            win.restoreHeight = win.height;
+
+            win.x = 0;
+            win.y = 0;
+            win.width = window.innerWidth;
+            win.height = window.innerHeight - kTaskbarHeight;
+            win.maximized = true;
+        }
+        else {
+            win.x = win.restoreX ?? 80;
+            win.y = win.restoreY ?? 80;
+            win.width = win.restoreWidth ?? 480;
+            win.height = win.restoreHeight ?? 320;
+            win.maximized = false;
+        }
+
+        refresh();
+    }
+
     function handleTitleMouseDown(e) {
         if (e.button !== 0)
             return;
 
         if (e.target.closest(".xwindow-controls"))
+            return;
+
+        if (win.maximized)
             return;
 
         desktop.bringToFront(win.id);
@@ -42,6 +64,8 @@ export default function XWindow({ win, desktop, refresh }) {
 
         window.addEventListener("mousemove", handleDragMouseMove);
         window.addEventListener("mouseup", handleDragMouseUp);
+
+        e.preventDefault();
     }
 
     function handleDragMouseMove(e) {
@@ -62,54 +86,15 @@ export default function XWindow({ win, desktop, refresh }) {
         window.removeEventListener("mouseup", handleDragMouseUp);
     }
 
-    function getResizeDirection(e) {
-        const rect = e.currentTarget.getBoundingClientRect();
-
-        const nearLeft = e.clientX >= rect.left && e.clientX <= rect.left + kEdgeSize;
-        const nearRight = e.clientX <= rect.right && e.clientX >= rect.right - kEdgeSize;
-        const nearTop = e.clientY >= rect.top && e.clientY <= rect.top + kEdgeSize;
-        const nearBottom = e.clientY <= rect.bottom && e.clientY >= rect.bottom - kEdgeSize;
-
-        if (nearTop && nearLeft)
-            return kResizeTopLeft;
-
-        if (nearTop && nearRight)
-            return kResizeTopRight;
-
-        if (nearBottom && nearLeft)
-            return kResizeBottomLeft;
-
-        if (nearBottom && nearRight)
-            return kResizeBottomRight;
-
-        if (nearLeft)
-            return kResizeLeft;
-
-        if (nearRight)
-            return kResizeRight;
-
-        if (nearTop)
-            return kResizeTop;
-
-        if (nearBottom)
-            return kResizeBottom;
-
-        return kResizeNone;
-    }
-
-    function handleWindowMouseDown(e) {
+    function beginResize(e, dir) {
         if (e.button !== 0)
+            return;
+
+        if (win.maximized)
             return;
 
         desktop.bringToFront(win.id);
         refresh();
-
-        if (e.target.closest(".xwindow-titlebar"))
-            return;
-
-        const dir = getResizeDirection(e);
-        if (!dir)
-            return;
 
         resizeRef.current = {
             dir,
@@ -125,6 +110,7 @@ export default function XWindow({ win, desktop, refresh }) {
         window.addEventListener("mouseup", handleResizeMouseUp);
 
         e.preventDefault();
+        e.stopPropagation();
     }
 
     function handleResizeMouseMove(e) {
@@ -172,29 +158,6 @@ export default function XWindow({ win, desktop, refresh }) {
         window.removeEventListener("mouseup", handleResizeMouseUp);
     }
 
-    function handleWindowMouseMove(e) {
-        const dir = getResizeDirection(e);
-
-        const map = {
-            [kResizeLeft]: "ew-resize",
-            [kResizeRight]: "ew-resize",
-            [kResizeTop]: "ns-resize",
-            [kResizeBottom]: "ns-resize",
-            [kResizeTopLeft]: "nwse-resize",
-            [kResizeBottomRight]: "nwse-resize",
-            [kResizeTopRight]: "nesw-resize",
-            [kResizeBottomLeft]: "nesw-resize",
-            [kResizeNone]: "default"
-        };
-
-        e.currentTarget.style.cursor = map[dir];
-    }
-
-    function handleWindowMouseLeave(e) {
-        if (!resizeRef.current && !dragRef.current)
-            e.currentTarget.style.cursor = "default";
-    }
-
     const style = {
         left: `${win.x}px`,
         top: `${win.y}px`,
@@ -204,13 +167,32 @@ export default function XWindow({ win, desktop, refresh }) {
 
     return (
         <section
-            className={`xwindow${win.active ? " active" : ""}`}
+            className={`xwindow${win.active ? " active" : ""}${win.maximized ? " maximized" : ""}`}
             style={style}
-            onMouseDown={handleWindowMouseDown}
-            onMouseMove={handleWindowMouseMove}
-            onMouseLeave={handleWindowMouseLeave}
+            onMouseDown={() => {
+                desktop.bringToFront(win.id);
+                refresh();
+            }}
         >
-            <header className="xwindow-titlebar" onMouseDown={handleTitleMouseDown}>
+            {!win.maximized && (
+                <>
+                    <div className="xwindow-resize-handle top" onMouseDown={(e) => beginResize(e, "top")} />
+                    <div className="xwindow-resize-handle right" onMouseDown={(e) => beginResize(e, "right")} />
+                    <div className="xwindow-resize-handle bottom" onMouseDown={(e) => beginResize(e, "bottom")} />
+                    <div className="xwindow-resize-handle left" onMouseDown={(e) => beginResize(e, "left")} />
+
+                    <div className="xwindow-resize-handle top-left" onMouseDown={(e) => beginResize(e, "top-left")} />
+                    <div className="xwindow-resize-handle top-right" onMouseDown={(e) => beginResize(e, "top-right")} />
+                    <div className="xwindow-resize-handle bottom-right" onMouseDown={(e) => beginResize(e, "bottom-right")} />
+                    <div className="xwindow-resize-handle bottom-left" onMouseDown={(e) => beginResize(e, "bottom-left")} />
+                </>
+            )}
+
+            <header
+                className="xwindow-titlebar"
+                onMouseDown={handleTitleMouseDown}
+                onDoubleClick={handleToggleMaximize}
+            >
                 <div className="xwindow-title">
                     <img
                         className="xwindow-title-icon"
@@ -218,15 +200,15 @@ export default function XWindow({ win, desktop, refresh }) {
                         alt=""
                         draggable="false"
                     />
-
-                    <span>{win.title}</span>
+                    <span className="title-content">{win.title}</span>
                 </div>
 
                 <div className="xwindow-controls">
                     <button
                         type="button"
                         className="xwindow-control-btn"
-                        onMouseDown={e => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onClick={handleMinimize}
                     >
                         <img src="/images/minimize.svg" alt="" draggable="false" />
                     </button>
@@ -234,15 +216,20 @@ export default function XWindow({ win, desktop, refresh }) {
                     <button
                         type="button"
                         className="xwindow-control-btn"
-                        onMouseDown={e => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onClick={handleToggleMaximize}
                     >
-                        <img src="/images/restore.svg" alt="" draggable="false" />
+                        <img
+                            src={win.maximized ? "/images/restore.svg" : "/images/maximize.svg"}
+                            alt=""
+                            draggable="false"
+                        />
                     </button>
 
                     <button
                         type="button"
                         className="xwindow-control-btn close"
-                        onMouseDown={e => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
                         onClick={handleClose}
                     >
                         <img src="/images/close.svg" alt="" draggable="false" />
@@ -250,7 +237,9 @@ export default function XWindow({ win, desktop, refresh }) {
                 </div>
             </header>
 
-            <div className="xwindow-body"></div>
+            <div className="xwindow-client">
+                <div className="xwindow-body"></div>
+            </div>
         </section>
     );
 }

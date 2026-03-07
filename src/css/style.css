@@ -1,9 +1,11 @@
 :root {
-    --desktop-bg: #1789c8;
+    /* rgb(22, 83, 124) */
+    --desktop-bg: #033d64;
+
     --desktop-bg-image: url("/images/bg2.jpg");
     --taskbar-h: 36px;
-    --taskbar-bg: rgba(10, 58, 96, 0.45);
-    --taskbar-border: rgba(0, 0, 0, 0.25);
+    --taskbar-bg: rgba(12, 45, 73, 0.72);
+    --taskbar-border: rgba(30, 94, 134, 0.5);
 
     --start-bg: rgb(45, 163, 238);
     --start-text: #ffffff;
@@ -25,10 +27,10 @@ body,
 }
 
 body {
-    background: var(--desktop-bg);
+    background-color: var(--desktop-bg);
     overflow: hidden;
 
-    background-image: var(--desktop-bg-image);
+    /* background-image: var(--desktop-bg-image); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
