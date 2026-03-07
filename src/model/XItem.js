@@ -19,11 +19,6 @@ export class XItem {
         if (!desktop)
             return;
 
-        if (this.type === XItemType.FOLDER) {
-            desktop.openFolder(this);
-        }
-        else if (this.type === XItemType.APP) {
-            desktop.openApp(this);
-        }
+        desktop.openItem(this);
     }
 }

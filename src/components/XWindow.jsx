@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { XItemType } from "../model/XItem.js";
 import XView from "./XView.jsx";
 
 const kMinWidth = 240;
@@ -161,6 +162,35 @@ export default function XWindow({ win, desktop }) {
         window.removeEventListener("mouseup", handleResizeMouseUp);
     }
 
+    function renderClient() {
+        switch (win.type) {
+            case XItemType.FOLDER:
+                return (
+                    <XView
+                        view={win.view}
+                        desktop={desktop}
+                        onActivate={activateWindow}
+                    />
+                );
+
+            case XItemType.APP:
+                return (
+                    <div className="xwindow-app-content">
+                        {win.title}
+                    </div>
+                );
+
+            default:
+                return (
+                    <XView
+                        view={win.view}
+                        desktop={desktop}
+                        onActivate={activateWindow}
+                    />
+                );
+        }
+    }
+
     const style = {
         left: `${win.x}px`,
         top: `${win.y}px`,
@@ -241,11 +271,7 @@ export default function XWindow({ win, desktop }) {
             </header>
 
             <div className="xwindow-client">
-                <XView
-                    view={win.view}
-                    desktop={desktop}
-                    onActivate={activateWindow}
-                />
+                {renderClient()}
             </div>
         </section>
     );

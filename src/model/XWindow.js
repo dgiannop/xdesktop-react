@@ -3,10 +3,10 @@ import { XView } from "./XView.js";
 export class XWindow {
     static _nextId = 1;
 
-    constructor(title = "Window", kind = "generic", icon = "/images/Generic.png") {
+    constructor(title = "Window", type = "generic", icon = "/images/Generic.png") {
         this.id = XWindow._nextId++;
         this.title = title;
-        this.kind = kind;
+        this.type = type;
         this.icon = icon;
 
         this.x = 80;
