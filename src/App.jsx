@@ -1,31 +1,27 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Desktop from "./components/Desktop.jsx";
 import Taskbar from "./components/Taskbar.jsx";
 import XWindow from "./components/XWindow.jsx";
 import { XDesktop } from "./model/XDesktop.js";
+import { useXStore } from "./hooks/useXStore.js";
 import "./css/style.css";
 import "./css/xwindow.css";
 
 export default function App() {
   const desktop = useMemo(() => new XDesktop(), []);
-  const [, forceUpdate] = useState(0);
 
-  function refresh() {
-    desktop.removeClosedWindows();
-    forceUpdate(prev => prev + 1);
-  }
+  useXStore(desktop.store);
 
   return (
     <div className="app">
       <main className="desktop">
-        <Desktop desktop={desktop} refresh={refresh} />
+        <Desktop desktop={desktop} />
 
-        {desktop.windows.map(win => (
+        {desktop.windows.filter(win => !win.minimized).map(win => (
           <XWindow
             key={win.id}
             win={win}
             desktop={desktop}
-            refresh={refresh}
           />
         ))}
       </main>

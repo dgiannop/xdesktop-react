@@ -1,3 +1,5 @@
+import { XView } from "./XView.js";
+
 export class XWindow {
     static _nextId = 1;
 
@@ -21,6 +23,8 @@ export class XWindow {
         this.closed = false;
         this.minimized = false;
         this.maximized = false;
+
+        this.view = new XView([]);
     }
 
     moveTo(x, y) {

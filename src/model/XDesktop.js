@@ -1,9 +1,13 @@
 import { XWindow } from "./XWindow.js";
 import { XItem, XItemType } from "./XItem.js";
+import { XView } from "./XView.js";
+import { XStore } from "./XStore.js";
 
 export class XDesktop {
     constructor() {
-        this.items = [
+        this.store = new XStore();
+
+        const items = [
             new XItem("Documents", XItemType.FOLDER, "", "/images/Documents.png"),
             new XItem("Pictures", XItemType.FOLDER, "", "/images/Pictures.png"),
             new XItem("Music", XItemType.FOLDER, "", "/images/Music.png"),
@@ -16,20 +20,35 @@ export class XDesktop {
             new XItem("Trash", XItemType.FOLDER, "", "/images/trash.png")
         ];
 
+        this.view = new XView(items);
         this.windows = [];
     }
 
+    notify() {
+        this.store.notify();
+    }
+
     addItem(item) {
-        this.items.push(item);
+        this.view.items.push(item);
+        this.notify();
     }
 
     addWindow(win) {
         this.windows.push(win);
         this.bringToFront(win.id);
+        this.notify();
     }
 
     removeClosedWindows() {
         this.windows = this.windows.filter(w => !w.closed);
+        this.notify();
+    }
+
+    deactivateAllWindows() {
+        for (const w of this.windows)
+            w.active = false;
+
+        this.notify();
     }
 
     bringToFront(windowId) {
@@ -45,6 +64,7 @@ export class XDesktop {
             w.active = false;
 
         win.active = true;
+        this.notify();
     }
 
     openFolder(item) {

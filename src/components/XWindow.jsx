@@ -1,21 +1,22 @@
 import { useRef } from "react";
+import XView from "./XView.jsx";
 
 const kMinWidth = 240;
 const kMinHeight = 140;
 const kTaskbarHeight = 36;
 
-export default function XWindow({ win, desktop, refresh }) {
+export default function XWindow({ win, desktop }) {
     const dragRef = useRef(null);
     const resizeRef = useRef(null);
 
     function handleClose() {
         win.close();
-        refresh();
+        desktop.removeClosedWindows();
     }
 
     function handleMinimize() {
         win.minimized = true;
-        refresh();
+        desktop.notify();
     }
 
     function handleToggleMaximize() {
@@ -39,7 +40,11 @@ export default function XWindow({ win, desktop, refresh }) {
             win.maximized = false;
         }
 
-        refresh();
+        desktop.notify();
+    }
+
+    function activateWindow() {
+        desktop.bringToFront(win.id);
     }
 
     function handleTitleMouseDown(e) {
@@ -52,8 +57,7 @@ export default function XWindow({ win, desktop, refresh }) {
         if (win.maximized)
             return;
 
-        desktop.bringToFront(win.id);
-        refresh();
+        activateWindow();
 
         dragRef.current = {
             startMouseX: e.clientX,
@@ -77,7 +81,7 @@ export default function XWindow({ win, desktop, refresh }) {
         const dy = e.clientY - drag.startMouseY;
 
         win.moveTo(drag.startX + dx, drag.startY + dy);
-        refresh();
+        desktop.notify();
     }
 
     function handleDragMouseUp() {
@@ -93,8 +97,7 @@ export default function XWindow({ win, desktop, refresh }) {
         if (win.maximized)
             return;
 
-        desktop.bringToFront(win.id);
-        refresh();
+        activateWindow();
 
         resizeRef.current = {
             dir,
@@ -149,7 +152,7 @@ export default function XWindow({ win, desktop, refresh }) {
         win.width = newWidth;
         win.height = newHeight;
 
-        refresh();
+        desktop.notify();
     }
 
     function handleResizeMouseUp() {
@@ -170,8 +173,7 @@ export default function XWindow({ win, desktop, refresh }) {
             className={`xwindow${win.active ? " active" : ""}${win.maximized ? " maximized" : ""}`}
             style={style}
             onMouseDown={() => {
-                desktop.bringToFront(win.id);
-                refresh();
+                activateWindow();
             }}
         >
             {!win.maximized && (
@@ -238,7 +240,11 @@ export default function XWindow({ win, desktop, refresh }) {
             </header>
 
             <div className="xwindow-client">
-                <div className="xwindow-body"></div>
+                <XView
+                    view={win.view}
+                    desktop={desktop}
+                    onActivate={activateWindow}
+                />
             </div>
         </section>
     );
