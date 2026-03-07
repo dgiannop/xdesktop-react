@@ -34,9 +34,9 @@ export class XDesktop {
     }
 
     addWindow(win) {
+        win.zIndex = (this._zCounter = (this._zCounter ?? 1) + 1);
         this.windows.push(win);
         this.bringToFront(win.id);
-        this.notify();
     }
 
     removeClosedWindows() {
@@ -52,18 +52,16 @@ export class XDesktop {
     }
 
     bringToFront(windowId) {
-        const idx = this.windows.findIndex(w => w.id === windowId);
-        if (idx < 0)
-            return;
-
-        const win = this.windows[idx];
-        this.windows.splice(idx, 1);
-        this.windows.push(win);
-
         for (const w of this.windows)
             w.active = false;
 
+        const win = this.windows.find(w => w.id === windowId);
+        if (!win)
+            return;
+
         win.active = true;
+        win.zIndex = (this._zCounter = (this._zCounter ?? 1) + 1);
+
         this.notify();
     }
 

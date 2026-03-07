@@ -23,9 +23,6 @@ export default function XView({ view, desktop, onActivate }) {
 
     function handleItemDoubleClick(item) {
         item.activate(desktop);
-
-        if (onActivate)
-            onActivate();
     }
 
     function iconForItem(item) {

@@ -165,7 +165,8 @@ export default function XWindow({ win, desktop }) {
         left: `${win.x}px`,
         top: `${win.y}px`,
         width: `${win.width}px`,
-        height: `${win.height}px`
+        height: `${win.height}px`,
+        zIndex: win.zIndex
     };
 
     return (

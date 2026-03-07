@@ -15,7 +15,7 @@ function formatClock() {
     return `${day} ${time}`;
 }
 
-export default function Taskbar() {
+export default function Taskbar({ desktop }) {
     const [clockText, setClockText] = useState(formatClock);
 
     useEffect(() => {
@@ -23,19 +23,56 @@ export default function Taskbar() {
             setClockText(formatClock());
         }, 3000);
 
-        setClockText(formatClock());
-
         return () => {
-            console.log("cleanup called");
             clearInterval(timerId);
         };
     }, []);
 
+    function handleWindowTabClick(win) {
+        if (win.minimized) {
+            win.minimized = false;
+            desktop.bringToFront(win.id);
+            return;
+        }
+
+        if (!win.active) {
+            desktop.bringToFront(win.id);
+            return;
+        }
+
+        win.minimized = true;
+        desktop.notify();
+    }
+
     return (
         <>
-            <button className="start-btn" type="button">Start</button>
+            <button className="start-btn" type="button">
+                Start
+            </button>
 
-            <div className="taskbar-center"></div>
+            <div className="taskbar-center">
+                <div className="taskbar-window-tabs">
+                    {desktop.windows.map(win => (
+                        <button
+                            key={win.id}
+                            type="button"
+                            className={`taskbar-window-tab${win.active && !win.minimized ? " active" : ""}${win.minimized ? " minimized" : ""}`}
+                            onClick={() => handleWindowTabClick(win)}
+                        >
+                            <img
+                                className="taskbar-window-tab-icon"
+                                src={win.icon || "/images/Generic.png"}
+                                alt=""
+                                draggable="false"
+                            />
+
+                            <span className="taskbar-window-tab-title">
+                                {win.title}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+            </div>
 
             <div className="taskbar-right">
                 <button className="tb-icon" type="button">

@@ -24,6 +24,8 @@ export class XWindow {
         this.minimized = false;
         this.maximized = false;
 
+        this.zIndex = 1;
+
         this.view = new XView([]);
     }
 

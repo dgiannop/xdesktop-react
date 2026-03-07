@@ -230,3 +230,63 @@ body {
     text-shadow: 0 1px 2px var(--shadow);
     white-space: nowrap;
 }
+
+.taskbar-center {
+    height: 100%;
+    min-width: 0;
+
+    display: flex;
+    align-items: stretch;
+}
+
+.taskbar-window-tabs {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+}
+
+.taskbar-window-tab {
+    min-width: 0;
+    max-width: 180px;
+    height: 100%;
+    padding: 0 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(0, 0, 0, 0.18);
+    background: transparent;
+
+    color: rgba(220, 228, 235, 0.9);
+    cursor: pointer;
+}
+
+.taskbar-window-tab.active {
+    background: rgba(25, 103, 155, 0.35);
+}
+
+.taskbar-window-tab.minimized {
+    color: rgba(220, 228, 235, 0.65);
+}
+
+.taskbar-window-tab-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+}
+
+.taskbar-window-tab-title {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 13px;
+}
