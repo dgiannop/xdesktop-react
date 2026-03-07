@@ -1,0 +1,230 @@
+:root {
+    --desktop-bg: #1789c8;
+    --desktop-bg-image: url("/images/bg2.jpg");
+    --taskbar-h: 36px;
+    --taskbar-bg: rgba(10, 58, 96, 0.45);
+    --taskbar-border: rgba(0, 0, 0, 0.25);
+
+    --start-bg: rgb(45, 163, 238);
+    --start-text: #ffffff;
+
+    --text: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.35);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+}
+
+body {
+    background: var(--desktop-bg);
+    overflow: hidden;
+
+    background-image: var(--desktop-bg-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Two rows: desktop + taskbar (taskbar will NOT overlap content) */
+.app {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr var(--taskbar-h);
+}
+
+/* Desktop surface */
+.desktop {
+    /* background-color: var(--desktop-bg); */
+
+    overflow: auto;
+}
+
+/* Icon layout: fixed-size cells that automatically wrap on resize */
+.icons {
+    padding: 18px 22px;
+    height: 100%;
+    min-height: 0;
+
+    display: grid;
+
+    /* This is the key: create as many rows as fit in the available HEIGHT */
+    grid-template-rows: repeat(auto-fill, 86px);
+
+    /* Fill DOWN the rows first, then create new columns */
+    grid-auto-flow: column;
+
+    /* Each column is fixed width */
+    grid-auto-columns: 96px;
+
+    /* spacing */
+    row-gap: 18px;
+    column-gap: 22px;
+
+    align-content: start;
+    justify-content: start;
+}
+
+/* Icon button */
+.desktop-icon {
+    width: 96px;
+    height: 86px;
+
+    border: 0;
+    background: transparent;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    color: var(--text);
+    text-shadow: 0 1px 2px var(--shadow);
+
+    cursor: default;
+    user-select: none;
+}
+
+.desktop-icon:focus {
+    outline: none;
+}
+
+.desktop-icon-visual {
+    width: 60px;
+    height: 60px;
+    margin-top: 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.desktop-icon img {
+    width: 48px !important;
+    height: 48px !important;
+
+    object-fit: contain;
+    display: block;
+
+    flex: 0 0 auto;
+    max-width: 48px;
+    max-height: 48px;
+
+    pointer-events: none;
+}
+
+.desktop-icon-label {
+    margin-top: 6px;
+    padding: 1px 6px 2px 6px;
+    max-width: 92px;
+
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.15;
+
+    border: 1px solid transparent;
+    border-radius: 3px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.desktop-icon.selected .desktop-icon-visual {
+    border-color: rgba(255, 255, 255, 0.45);
+    background: rgba(120, 200, 255, 0.18);
+}
+
+.desktop-icon.selected .desktop-icon-label {
+    border-color: rgba(255, 255, 255, 0.7);
+    background: rgba(20, 90, 160, 0.9);
+}
+
+.desktop-icon span {
+    margin-top: 8px;
+    width: 100%;
+    text-align: center;
+
+    font-size: 14px;
+    line-height: 1.1;
+}
+
+/* Taskbar row */
+.taskbar {
+    height: var(--taskbar-h);
+
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    align-items: center;
+
+    background: var(--taskbar-bg);
+    border-top: 1px solid var(--taskbar-border);
+
+    backdrop-filter: blur(4px);
+    /* blur background */
+    -webkit-backdrop-filter: blur(4px);
+    /* Safari */
+}
+
+.start-btn {
+    height: var(--taskbar-h);
+    width: 100px;
+
+    border: 0;
+    background: var(--start-bg);
+    color: var(--start-text);
+
+    font-size: 16px;
+    font-weight: 500;
+
+    text-align: center;
+
+    cursor: pointer;
+    color: rgb(235, 209, 209);
+}
+
+.taskbar-center {
+    height: 100%;
+}
+
+.taskbar-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-right: 16px;
+}
+
+.tb-icon {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+
+.tb-icon img {
+    width: 24px;
+    height: 24px;
+    display: block;
+    pointer-events: none;
+    filter: drop-shadow(0 1px 1px rgba(235, 227, 227, 0.35));
+}
+
+.clock {
+    color: var(--text);
+    font-size: 14px;
+    text-shadow: 0 1px 2px var(--shadow);
+    white-space: nowrap;
+}
