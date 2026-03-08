@@ -4,15 +4,27 @@ export const XItemType = Object.freeze({
     APP: "app"
 });
 
+export const XItemOwner = Object.freeze({
+    USER: "user",
+    SYSTEM: "system"
+});
+
 export class XItem {
     static _nextId = 1;
 
-    constructor(title = "", type = XItemType.ITEM, path = "", icon = "") {
+    constructor(
+        title = "",
+        type = XItemType.ITEM,
+        path = "",
+        icon = "",
+        owner = XItemOwner.USER
+    ) {
         this.id = XItem._nextId++;
         this.title = title;
         this.type = type;
         this.path = path;
         this.icon = icon;
+        this.owner = owner;
     }
 
     activate(desktop) {

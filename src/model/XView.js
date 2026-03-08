@@ -1,7 +1,9 @@
 export class XView {
-    constructor(items = []) {
-        this.items = items;
+    constructor(items = [], path = "") {
+        this.items = Array.isArray(items) ? items : [];
+        this.path = path;
         this.selectedItemId = null;
+        this.editingItemId = null;
     }
 
     clearSelection() {
@@ -14,5 +16,17 @@ export class XView {
 
     isSelected(itemId) {
         return this.selectedItemId === itemId;
+    }
+
+    beginEditItem(itemId) {
+        this.editingItemId = itemId;
+    }
+
+    endEditItem() {
+        this.editingItemId = null;
+    }
+
+    isEditing(itemId) {
+        return this.editingItemId === itemId;
     }
 }

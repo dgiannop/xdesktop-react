@@ -26,7 +26,7 @@ export class XWindow {
 
         this.zIndex = 1;
 
-        this.view = new XView([]);
+        this.view = new XView([], "");
     }
 
     moveTo(x, y) {
