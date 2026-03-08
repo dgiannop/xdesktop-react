@@ -166,45 +166,40 @@ body {
 .taskbar {
     height: var(--taskbar-h);
 
-    display: grid;
-    grid-template-columns: 120px 1fr auto;
-    align-items: center;
+    display: flex;
+    align-items: stretch;
 
     background: var(--taskbar-bg);
     border-top: 1px solid var(--taskbar-border);
 
     backdrop-filter: blur(4px);
-    /* blur background */
     -webkit-backdrop-filter: blur(4px);
-    /* Safari */
+
+    overflow: hidden;
 }
 
 .start-btn {
-    height: var(--taskbar-h);
-    width: 100px;
-
+    flex: 0 0 100px;
+    height: 100%;
     border: 0;
+    margin: 0;
+    padding: 0 12px;
     background: var(--start-bg);
     color: var(--start-text);
-
     font-size: 16px;
     font-weight: 500;
-
     text-align: center;
-
     cursor: pointer;
-    color: rgb(235, 209, 209);
-}
-
-.taskbar-center {
-    height: 100%;
 }
 
 .taskbar-right {
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
     gap: 14px;
-    padding-right: 16px;
+    padding: 0 16px;
+    height: 100%;
+    white-space: nowrap;
 }
 
 .tb-icon {
@@ -231,28 +226,27 @@ body {
     white-space: nowrap;
 }
 
-.taskbar-center {
-    height: 100%;
-    min-width: 0;
-
-    display: flex;
-    align-items: stretch;
-}
-
 .taskbar-window-tabs {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
+    height: 100%;
 
     display: flex;
     align-items: stretch;
     gap: 0;
+
+    overflow: hidden;
 }
 
 .taskbar-window-tab {
-    min-width: 0;
-    max-width: 180px;
+    flex: 0 0 100px;
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
     height: 100%;
-    padding: 0 12px;
+
+    padding: 0 10px;
+    margin: 0;
 
     display: flex;
     align-items: center;
@@ -265,6 +259,7 @@ body {
 
     color: rgba(220, 228, 235, 0.9);
     cursor: pointer;
+    min-width: 0;
 }
 
 .taskbar-window-tab.active {
@@ -278,17 +273,20 @@ body {
 .taskbar-window-tab-icon {
     width: 16px;
     height: 16px;
+    flex: 0 0 16px;
     object-fit: contain;
     display: block;
     pointer-events: none;
 }
 
 .taskbar-window-tab-title {
+    flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 13px;
+    text-align: left;
 }
 
 .xcontext-menu {

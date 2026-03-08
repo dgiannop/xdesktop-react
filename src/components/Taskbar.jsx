@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+const kTaskbarTabWidth = 140;
+
 function formatClock() {
     const now = new Date();
 
@@ -50,14 +52,20 @@ export default function Taskbar({ desktop }) {
                 Start
             </button>
 
-            <div className="taskbar-center">
-                <div className="taskbar-window-tabs">
-                    {desktop.windows.map(win => (
+            <div className="taskbar-window-tabs">
+                {desktop.windows
+                    .filter(win => !win.closed)
+                    .map(win => (
                         <button
                             key={win.id}
                             type="button"
                             className={`taskbar-window-tab${win.active && !win.minimized ? " active" : ""}${win.minimized ? " minimized" : ""}`}
                             onClick={() => handleWindowTabClick(win)}
+                            style={{
+                                width: `${kTaskbarTabWidth}px`,
+                                minWidth: `${kTaskbarTabWidth}px`,
+                                maxWidth: `${kTaskbarTabWidth}px`
+                            }}
                         >
                             <img
                                 className="taskbar-window-tab-icon"
@@ -71,7 +79,6 @@ export default function Taskbar({ desktop }) {
                             </span>
                         </button>
                     ))}
-                </div>
             </div>
 
             <div className="taskbar-right">
