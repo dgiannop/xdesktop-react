@@ -183,9 +183,6 @@ export class XDesktop {
         if (!item)
             return false;
 
-        if (item.owner !== XItemOwner.USER)
-            return false;
-
         this.dragItem = item;
         this.dragSourcePath = sourcePath ?? "";
         this.notify();
@@ -211,7 +208,7 @@ export class XDesktop {
         if (!item)
             return false;
 
-        if (item.owner !== XItemOwner.USER)
+        if (item.owner === XItemOwner.SYSTEM)
             return false;
 
         const srcPath = fromPath ?? "";

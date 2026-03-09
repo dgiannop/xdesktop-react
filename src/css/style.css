@@ -29,8 +29,6 @@ body,
 body {
     background-color: var(--desktop-bg);
     overflow: hidden;
-
-    /* background-image: var(--desktop-bg-image); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -45,8 +43,7 @@ body {
 
 /* Desktop surface */
 .desktop {
-    /* background-color: var(--desktop-bg); */
-
+    position: relative;
     overflow: auto;
 }
 
@@ -57,17 +54,9 @@ body {
     min-height: 0;
 
     display: grid;
-
-    /* This is the key: create as many rows as fit in the available HEIGHT */
     grid-template-rows: repeat(auto-fill, 86px);
-
-    /* Fill DOWN the rows first, then create new columns */
     grid-auto-flow: column;
-
-    /* Each column is fixed width */
     grid-auto-columns: 96px;
-
-    /* spacing */
     row-gap: 18px;
     column-gap: 22px;
 
@@ -164,6 +153,9 @@ body {
 
 /* Taskbar row */
 .taskbar {
+    position: relative;
+    z-index: 200000;
+
     height: var(--taskbar-h);
 
     display: flex;
@@ -190,6 +182,11 @@ body {
     font-weight: 500;
     text-align: center;
     cursor: pointer;
+}
+
+.start-btn.active {
+    background: #2aa0ea;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.18);
 }
 
 .taskbar-right {
@@ -324,4 +321,156 @@ body {
 .desktop-icon.drop-target {
     background: rgba(255, 255, 255, 0.12);
     border-radius: 6px;
+}
+
+/* Start menu */
+.start-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 150000;
+}
+
+.start-menu {
+    position: absolute;
+    left: 4px;
+    bottom: calc(var(--taskbar-h) + 4px);
+
+    width: 360px;
+    min-height: 455px;
+
+    display: flex;
+    flex-direction: column;
+
+    color: #ffffff;
+    background: linear-gradient(to bottom, #1e74b1 0%, #16679f 100%);
+    border: 1px solid rgba(38, 123, 178, 0.95);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+}
+
+.start-menu-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 42px;
+    padding: 10px 12px 8px 12px;
+}
+
+.start-menu-user-image {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    object-fit: cover;
+    display: block;
+    flex: 0 0 28px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.start-menu-user-name {
+    font-size: 15px;
+    line-height: 1;
+    color: #ffffff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+}
+
+.start-menu-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    padding: 0 6px;
+}
+
+.start-menu-left-panel {
+    flex: 0 0 178px;
+    margin-right: 6px;
+    border-radius: 3px;
+    background: rgba(112, 191, 246, 0.78);
+}
+
+.start-menu-right-panel {
+    flex: 1 1 auto;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    padding: 4px 0 0 0;
+}
+
+.start-menu-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.start-menu-item {
+    width: 100%;
+    min-height: 30px;
+    padding: 0 4px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    text-align: left;
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.start-menu-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+}
+
+.start-menu-item-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    display: block;
+    flex: 0 0 14px;
+}
+
+.start-menu-item-icon-placeholder {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    display: block;
+}
+
+.start-menu-item-label {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.start-menu-spacer {
+    flex: 1 1 auto;
+    min-height: 40px;
+}
+
+.start-menu-search-row {
+    padding: 6px;
+}
+
+.start-menu-search {
+    width: 100%;
+    height: 28px;
+    border: 0;
+    outline: none;
+    border-radius: 3px;
+    padding: 0 10px;
+
+    color: #ffffff;
+    background: rgba(110, 187, 240, 0.8);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.start-menu-search::placeholder {
+    color: rgba(255, 255, 255, 0.72);
 }

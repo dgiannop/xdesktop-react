@@ -184,11 +184,6 @@ export default function XView({ view, desktop, onActivate }) {
             return;
         }
 
-        if (item.owner !== XItemOwner.USER) {
-            e.preventDefault();
-            return;
-        }
-
         view.selectItem(item.id);
         view.endEditItem();
 
@@ -299,7 +294,7 @@ export default function XView({ view, desktop, onActivate }) {
                 <button
                     key={item.id}
                     type="button"
-                    draggable={item.owner === XItemOwner.USER && !view.isEditing(item.id)}
+                    draggable={!view.isEditing(item.id)}
                     className={`desktop-icon${view.isSelected(item.id) ? " selected" : ""}${dropFolderItemId === item.id ? " drop-target" : ""}`}
                     onClick={(e) => handleItemClick(e, item)}
                     onDoubleClick={() => handleItemDoubleClick(item)}

@@ -17,7 +17,7 @@ function formatClock() {
     return `${day} ${time}`;
 }
 
-export default function Taskbar({ desktop }) {
+export default function Taskbar({ desktop, startMenuOpen, onToggleStartMenu }) {
     const [clockText, setClockText] = useState(formatClock);
 
     useEffect(() => {
@@ -48,7 +48,11 @@ export default function Taskbar({ desktop }) {
 
     return (
         <>
-            <button className="start-btn" type="button">
+            <button
+                className={`start-btn${startMenuOpen ? " active" : ""}`}
+                type="button"
+                onClick={onToggleStartMenu}
+            >
                 Start
             </button>
 

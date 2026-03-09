@@ -1,5 +1,6 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Desktop from "./components/Desktop.jsx";
+import StartMenu from "./components/StartMenu.jsx";
 import Taskbar from "./components/Taskbar.jsx";
 import XWindow from "./components/XWindow.jsx";
 import { XDesktop } from "./model/XDesktop.js";
@@ -10,6 +11,7 @@ import "./css/xwindow.css";
 
 export default function App() {
   const desktop = useMemo(() => new XDesktop(), []);
+  const [startMenuOpen, setStartMenuOpen] = useState(false);
 
   useXStore(desktop.store);
 
@@ -18,22 +20,54 @@ export default function App() {
       if (e.key !== "Escape")
         return;
 
-      if (!desktop.contextMenu.visible)
-        return;
+      let changed = false;
 
-      desktop.contextMenu.close();
-      desktop.notify();
+      if (desktop.contextMenu.visible) {
+        desktop.contextMenu.close();
+        changed = true;
+      }
+
+      if (startMenuOpen)
+        setStartMenuOpen(false);
+
+      if (changed)
+        desktop.notify();
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [desktop]);
+  }, [desktop, startMenuOpen]);
+
+  function closeTransientUi() {
+    let changed = false;
+
+    if (desktop.contextMenu.visible) {
+      desktop.contextMenu.close();
+      changed = true;
+    }
+
+    if (startMenuOpen)
+      setStartMenuOpen(false);
+
+    if (changed)
+      desktop.notify();
+  }
 
   function handleDesktopMouseDown() {
+    closeTransientUi();
+  }
+
+  function handleToggleStartMenu() {
     if (desktop.contextMenu.visible) {
       desktop.contextMenu.close();
       desktop.notify();
     }
+
+    setStartMenuOpen(prev => !prev);
+  }
+
+  function handleCloseStartMenu() {
+    setStartMenuOpen(false);
   }
 
   return (
@@ -41,22 +75,33 @@ export default function App() {
       <main className="desktop" onMouseDown={handleDesktopMouseDown}>
         <Desktop desktop={desktop} />
 
-        {desktop.windows.filter(win => !win.minimized).map(win => (
-          <XWindow
-            key={win.id}
-            win={win}
-            desktop={desktop}
-          />
-        ))}
+        {desktop.windows
+          .filter(win => !win.minimized)
+          .map(win => (
+            <XWindow
+              key={win.id}
+              win={win}
+              desktop={desktop}
+            />
+          ))}
 
         <XContextMenu
           menu={desktop.contextMenu}
           desktop={desktop}
         />
+
+        <StartMenu
+          open={startMenuOpen}
+          onClose={handleCloseStartMenu}
+        />
       </main>
 
       <footer className="taskbar">
-        <Taskbar desktop={desktop} />
+        <Taskbar
+          desktop={desktop}
+          startMenuOpen={startMenuOpen}
+          onToggleStartMenu={handleToggleStartMenu}
+        />
       </footer>
     </div>
   );
