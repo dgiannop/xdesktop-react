@@ -276,9 +276,9 @@ export default function XView({ view, desktop, onActivate }) {
             return item.icon;
 
         if (item.type === XItemType.APP)
-            return "/images/react.png";
+            return "images/react.png";
 
-        return "/images/Generic.png";
+        return "images/Generic.png";
     }
 
     return (

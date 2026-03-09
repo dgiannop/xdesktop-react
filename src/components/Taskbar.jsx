@@ -110,7 +110,7 @@ export default function Taskbar({ desktop, startMenuOpen, onToggleStartMenu }) {
                         >
                             <img
                                 className="taskbar-window-tab-icon"
-                                src={win.icon || "/images/Generic.png"}
+                                src={win.icon || "images/Generic.png"}
                                 alt=""
                                 draggable="false"
                             />
@@ -132,7 +132,7 @@ export default function Taskbar({ desktop, startMenuOpen, onToggleStartMenu }) {
                         type="button"
                         onClick={() => setMenuOpen(prev => !prev)}
                     >
-                        <img src="/images/menu.svg" alt="" draggable="false" />
+                        <img src="images/menu.svg" alt="" draggable="false" />
                     </button>
 
                     <div className="taskbar-popup-menu">

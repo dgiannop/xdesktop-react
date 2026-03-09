@@ -19,41 +19,41 @@ export class XDesktop {
         this.dragSourcePath = "";
 
         const items = [
-            new XItem("Documents", XItemType.FOLDER, "Documents", "/images/Documents.png", XItemOwner.SYSTEM),
-            new XItem("Pictures", XItemType.FOLDER, "Pictures", "/images/Pictures.png", XItemOwner.SYSTEM),
-            new XItem("Music", XItemType.FOLDER, "Music", "/images/Music.png", XItemOwner.SYSTEM),
-            new XItem("Videos", XItemType.FOLDER, "Videos", "/images/Videos.png", XItemOwner.SYSTEM),
-            new XItem("Public", XItemType.FOLDER, "Public", "/images/Public.png", XItemOwner.SYSTEM),
-            new XItem("Sync", XItemType.FOLDER, "Sync", "/images/sync.png", XItemOwner.SYSTEM),
-            new XItem("Home", XItemType.FOLDER, "Home", "/images/Home.png", XItemOwner.SYSTEM),
-            new XItem("Applications", XItemType.FOLDER, "Applications", "/images/Applications.png", XItemOwner.SYSTEM),
-            new XItem("Desktop", XItemType.FOLDER, "Desktop", "/images/Desktop.png", XItemOwner.SYSTEM),
-            new XItem("Trash", XItemType.FOLDER, "Trash", "/images/trash.png", XItemOwner.SYSTEM)
+            new XItem("Documents", XItemType.FOLDER, "Documents", "images/Documents.png", XItemOwner.SYSTEM),
+            new XItem("Pictures", XItemType.FOLDER, "Pictures", "images/Pictures.png", XItemOwner.SYSTEM),
+            new XItem("Music", XItemType.FOLDER, "Music", "images/Music.png", XItemOwner.SYSTEM),
+            new XItem("Videos", XItemType.FOLDER, "Videos", "images/Videos.png", XItemOwner.SYSTEM),
+            new XItem("Public", XItemType.FOLDER, "Public", "images/Public.png", XItemOwner.SYSTEM),
+            new XItem("Sync", XItemType.FOLDER, "Sync", "images/sync.png", XItemOwner.SYSTEM),
+            new XItem("Home", XItemType.FOLDER, "Home", "images/Home.png", XItemOwner.SYSTEM),
+            new XItem("Applications", XItemType.FOLDER, "Applications", "images/Applications.png", XItemOwner.SYSTEM),
+            new XItem("Desktop", XItemType.FOLDER, "Desktop", "images/Desktop.png", XItemOwner.SYSTEM),
+            new XItem("Trash", XItemType.FOLDER, "Trash", "images/trash.png", XItemOwner.SYSTEM)
         ];
 
         this.view = new XView(items, "");
         this.windows = [];
 
-        const documents = new XFolder("Documents", "Documents", "/images/Documents.png", XItemOwner.SYSTEM);
-        documents.addItem(new XItem("Notes.txt", XItemType.ITEM, "Documents/Notes.txt", "/images/file.svg", XItemOwner.USER, "These are some notes.\n"));
-        documents.addItem(new XItem("Resume.txt", XItemType.ITEM, "Documents/Resume.txt", "/images/file.svg", XItemOwner.USER, "Resume draft\n"));
+        const documents = new XFolder("Documents", "Documents", "images/Documents.png", XItemOwner.SYSTEM);
+        documents.addItem(new XItem("Notes.txt", XItemType.ITEM, "Documents/Notes.txt", "images/file.svg", XItemOwner.USER, "These are some notes.\n"));
+        documents.addItem(new XItem("Resume.txt", XItemType.ITEM, "Documents/Resume.txt", "images/file.svg", XItemOwner.USER, "Resume draft\n"));
 
-        const pictures = new XFolder("Pictures", "Pictures", "/images/Pictures.png", XItemOwner.SYSTEM);
-        pictures.addItem(new XItem("Photo 1", XItemType.ITEM, "Pictures/Photo1", "/images/file.png"));
-        pictures.addItem(new XItem("Photo 2", XItemType.ITEM, "Pictures/Photo2", "/images/file.png"));
+        const pictures = new XFolder("Pictures", "Pictures", "images/Pictures.png", XItemOwner.SYSTEM);
+        pictures.addItem(new XItem("Photo 1", XItemType.ITEM, "Pictures/Photo1", "images/file.png"));
+        pictures.addItem(new XItem("Photo 2", XItemType.ITEM, "Pictures/Photo2", "images/file.png"));
 
-        const music = new XFolder("Music", "Music", "/images/Music.png", XItemOwner.SYSTEM);
-        const videos = new XFolder("Videos", "Videos", "/images/Videos.png", XItemOwner.SYSTEM);
-        const pub = new XFolder("Public", "Public", "/images/Public.png", XItemOwner.SYSTEM);
-        const sync = new XFolder("Sync", "Sync", "/images/sync.png", XItemOwner.SYSTEM);
-        const home = new XFolder("Home", "Home", "/images/Home.png", XItemOwner.SYSTEM);
-        const desktopFolder = new XFolder("Desktop", "Desktop", "/images/Desktop.png", XItemOwner.SYSTEM);
-        const trash = new XFolder("Trash", "Trash", "/images/trash.png", XItemOwner.SYSTEM);
+        const music = new XFolder("Music", "Music", "images/Music.png", XItemOwner.SYSTEM);
+        const videos = new XFolder("Videos", "Videos", "images/Videos.png", XItemOwner.SYSTEM);
+        const pub = new XFolder("Public", "Public", "images/Public.png", XItemOwner.SYSTEM);
+        const sync = new XFolder("Sync", "Sync", "images/sync.png", XItemOwner.SYSTEM);
+        const home = new XFolder("Home", "Home", "images/Home.png", XItemOwner.SYSTEM);
+        const desktopFolder = new XFolder("Desktop", "Desktop", "images/Desktop.png", XItemOwner.SYSTEM);
+        const trash = new XFolder("Trash", "Trash", "images/trash.png", XItemOwner.SYSTEM);
 
-        const applications = new XFolder("Applications", "Applications", "/images/Applications.png", XItemOwner.SYSTEM);
-        applications.addItem(new XItem("Calculator", XItemType.APP, "Applications/Calculator", "/images/react.svg"));
-        applications.addItem(new XItem("Editor", XItemType.APP, "Applications/Editor", "/images/react.svg"));
-        applications.addItem(new XItem("Notepad", XItemType.APP, "Applications/Notepad", "/images/notepad.png"));
+        const applications = new XFolder("Applications", "Applications", "images/Applications.png", XItemOwner.SYSTEM);
+        applications.addItem(new XItem("Calculator", XItemType.APP, "Applications/Calculator", "images/react.svg"));
+        applications.addItem(new XItem("Editor", XItemType.APP, "Applications/Editor", "images/react.svg"));
+        applications.addItem(new XItem("Notepad", XItemType.APP, "Applications/Notepad", "images/notepad.png"));
 
         this.fs.addFolder(documents);
         this.fs.addFolder(pictures);
@@ -136,7 +136,7 @@ export class XDesktop {
         const win = new XWindow(
             item.title,
             XItemType.ITEM,
-            "/images/notepad.png"
+            "images/notepad.png"
         );
 
         win.fileItem = item;
@@ -152,7 +152,7 @@ export class XDesktop {
         const win = new XWindow(
             item.title,
             XItemType.FOLDER,
-            item.icon || "/images/Generic.png"
+            item.icon || "images/Generic.png"
         );
 
         win.view.path = item.path;
@@ -164,13 +164,13 @@ export class XDesktop {
         const win = new XWindow(
             item.title,
             XItemType.APP,
-            item.icon || "/images/react.svg"
+            item.icon || "images/react.svg"
         );
 
         this.addWindow(win);
     }
 
-    createFolder(parentPath, name, icon = "/images/Generic.png", owner = XItemOwner.USER) {
+    createFolder(parentPath, name, icon = "images/Generic.png", owner = XItemOwner.USER) {
         const path = parentPath ? `${parentPath}/${name}` : name;
 
         const folder = new XFolder(name, path, icon, owner);
@@ -187,7 +187,7 @@ export class XDesktop {
         return item;
     }
 
-    createFile(parentPath, name, icon = "/images/file.svg", owner = XItemOwner.USER) {
+    createFile(parentPath, name, icon = "images/file.svg", owner = XItemOwner.USER) {
         const path = parentPath ? `${parentPath}/${name}` : name;
         const item = new XItem(name, XItemType.ITEM, path, icon, owner, "");
 

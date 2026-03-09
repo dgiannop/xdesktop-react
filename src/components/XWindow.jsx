@@ -247,7 +247,7 @@ export default function XWindow({ win, desktop }) {
                 <div className="xwindow-title">
                     <img
                         className="xwindow-title-icon"
-                        src={win.icon || "/images/Generic.png"}
+                        src={win.icon || "images/Generic.png"}
                         alt=""
                         draggable="false"
                     />
@@ -261,7 +261,7 @@ export default function XWindow({ win, desktop }) {
                         onMouseDown={(e) => e.stopPropagation()}
                         onClick={handleMinimize}
                     >
-                        <img src="/images/minimize.svg" alt="" draggable="false" />
+                        <img src="images/minimize.svg" alt="" draggable="false" />
                     </button>
 
                     <button
@@ -271,7 +271,7 @@ export default function XWindow({ win, desktop }) {
                         onClick={handleToggleMaximize}
                     >
                         <img
-                            src={win.maximized ? "/images/restore.svg" : "/images/maximize.svg"}
+                            src={win.maximized ? "images/restore.svg" : "images/maximize.svg"}
                             alt=""
                             draggable="false"
                         />
@@ -283,7 +283,7 @@ export default function XWindow({ win, desktop }) {
                         onMouseDown={(e) => e.stopPropagation()}
                         onClick={handleClose}
                     >
-                        <img src="/images/close.svg" alt="" draggable="false" />
+                        <img src="images/close.svg" alt="" draggable="false" />
                     </button>
                 </div>
             </header>

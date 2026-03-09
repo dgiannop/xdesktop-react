@@ -1,7 +1,7 @@
 const kPrimaryItems = [
-    { id: "home", label: "Home Folder", icon: "/images/Home Folder.png" },
-    { id: "documents", label: "Documents", icon: "/images/Documents.png" },
-    { id: "pictures", label: "Pictures", icon: "/images/Pictures.png" },
+    { id: "home", label: "Home Folder", icon: "images/Home Folder.png" },
+    { id: "documents", label: "Documents", icon: "images/Documents.png" },
+    { id: "pictures", label: "Pictures", icon: "images/Pictures.png" },
     { id: "video", label: "Video", icon: null },
     { id: "music", label: "Music", icon: null },
     { id: "sync", label: "Sync", icon: null },
@@ -35,7 +35,7 @@ export default function StartMenu({ open, onClose }) {
                 <div className="start-menu-header">
                     <img
                         className="start-menu-user-image"
-                        src="/images/dan.jpg"
+                        src="images/dan.jpg"
                         alt=""
                         draggable="false"
                     />
