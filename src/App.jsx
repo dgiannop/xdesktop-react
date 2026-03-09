@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Desktop from "./components/Desktop.jsx";
+import SplashScreen from "./components/SplashScreen.jsx";
 import StartMenu from "./components/StartMenu.jsx";
 import Taskbar from "./components/Taskbar.jsx";
 import XWindow from "./components/XWindow.jsx";
@@ -12,6 +13,7 @@ import "./css/xwindow.css";
 export default function App() {
   const desktop = useMemo(() => new XDesktop(), []);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
+  const [splashOpen, setSplashOpen] = useState(true);
 
   useXStore(desktop.store);
 
@@ -30,13 +32,16 @@ export default function App() {
       if (startMenuOpen)
         setStartMenuOpen(false);
 
+      if (splashOpen)
+        setSplashOpen(false);
+
       if (changed)
         desktop.notify();
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [desktop, startMenuOpen]);
+  }, [desktop, startMenuOpen, splashOpen]);
 
   function closeTransientUi() {
     let changed = false;
@@ -54,10 +59,16 @@ export default function App() {
   }
 
   function handleDesktopMouseDown() {
+    if (splashOpen)
+      return;
+
     closeTransientUi();
   }
 
   function handleToggleStartMenu() {
+    if (splashOpen)
+      return;
+
     if (desktop.contextMenu.visible) {
       desktop.contextMenu.close();
       desktop.notify();
@@ -68,6 +79,10 @@ export default function App() {
 
   function handleCloseStartMenu() {
     setStartMenuOpen(false);
+  }
+
+  function handleCloseSplash() {
+    setSplashOpen(false);
   }
 
   return (
@@ -93,6 +108,11 @@ export default function App() {
         <StartMenu
           open={startMenuOpen}
           onClose={handleCloseStartMenu}
+        />
+
+        <SplashScreen
+          open={splashOpen}
+          onClose={handleCloseSplash}
         />
       </main>
 
