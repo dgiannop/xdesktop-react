@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const kTaskbarTabWidth = 140;
 
@@ -19,6 +19,8 @@ function formatClock() {
 
 export default function Taskbar({ desktop, startMenuOpen, onToggleStartMenu }) {
     const [clockText, setClockText] = useState(formatClock);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
 
     useEffect(() => {
         const timerId = setInterval(() => {
@@ -27,6 +29,31 @@ export default function Taskbar({ desktop, startMenuOpen, onToggleStartMenu }) {
 
         return () => {
             clearInterval(timerId);
+        };
+    }, []);
+
+    useEffect(() => {
+        function handleMouseDown(e) {
+            if (!menuRef.current)
+                return;
+
+            if (menuRef.current.contains(e.target))
+                return;
+
+            setMenuOpen(false);
+        }
+
+        function handleKeyDown(e) {
+            if (e.key === "Escape")
+                setMenuOpen(false);
+        }
+
+        window.addEventListener("mousedown", handleMouseDown);
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("mousedown", handleMouseDown);
+            window.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
 
@@ -44,6 +71,16 @@ export default function Taskbar({ desktop, startMenuOpen, onToggleStartMenu }) {
 
         win.minimized = true;
         desktop.notify();
+    }
+
+    function handleCenterWindows() {
+        setMenuOpen(false);
+        desktop.centerWindows();
+    }
+
+    function handleToggleFullscreen() {
+        setMenuOpen(false);
+        desktop.toggleFullscreen();
     }
 
     return (
@@ -86,9 +123,36 @@ export default function Taskbar({ desktop, startMenuOpen, onToggleStartMenu }) {
             </div>
 
             <div className="taskbar-right">
-                <button className="tb-icon" type="button">
-                    <img src="/images/menu.svg" alt="" draggable="false" />
-                </button>
+                <div
+                    ref={menuRef}
+                    className={`taskbar-menu-button${menuOpen ? " active" : ""}`}
+                >
+                    <button
+                        className="tb-icon"
+                        type="button"
+                        onClick={() => setMenuOpen(prev => !prev)}
+                    >
+                        <img src="/images/menu.svg" alt="" draggable="false" />
+                    </button>
+
+                    <div className="taskbar-popup-menu">
+                        <button
+                            type="button"
+                            className="taskbar-popup-item"
+                            onClick={handleCenterWindows}
+                        >
+                            Center Windows
+                        </button>
+
+                        <button
+                            type="button"
+                            className="taskbar-popup-item"
+                            onClick={handleToggleFullscreen}
+                        >
+                            Toggle Fullscreen
+                        </button>
+                    </div>
+                </div>
 
                 <div className="clock">
                     {clockText}

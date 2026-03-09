@@ -166,7 +166,7 @@ export class XDesktop {
         return item;
     }
 
-    createFile(parentPath, name, icon = "/images/Generic.png", owner = XItemOwner.USER) {
+    createFile(parentPath, name, icon = "/images/file.svg", owner = XItemOwner.USER) {
         const path = parentPath ? `${parentPath}/${name}` : name;
         const item = new XItem(name, XItemType.ITEM, path, icon, owner);
 
@@ -474,5 +474,63 @@ export class XDesktop {
         }
 
         this.removeClosedWindows();
+    }
+
+    centerWindows() {
+        const visibleWindows = this.windows.filter(win => !win.closed && !win.minimized);
+        if (visibleWindows.length === 0)
+            return;
+
+        const desktopWidth = window.innerWidth;
+        const desktopHeight = window.innerHeight - 36;
+
+        const cascadeOffsetX = 24;
+        const cascadeOffsetY = 24;
+        const margin = 12;
+
+        for (let i = 0; i < visibleWindows.length; ++i) {
+            const win = visibleWindows[i];
+
+            if (win.maximized) {
+                win.maximized = false;
+                win.x = win.restoreX ?? 80;
+                win.y = win.restoreY ?? 80;
+                win.width = win.restoreWidth ?? 480;
+                win.height = win.restoreHeight ?? 320;
+            }
+
+            const centeredX = Math.round((desktopWidth - win.width) * 0.5);
+            const centeredY = Math.round((desktopHeight - win.height) * 0.5);
+
+            const offsetX = i * cascadeOffsetX;
+            const offsetY = i * cascadeOffsetY;
+
+            const maxX = Math.max(margin, desktopWidth - win.width - margin);
+            const maxY = Math.max(margin, desktopHeight - win.height - margin);
+
+            win.x = Math.min(Math.max(centeredX + offsetX, margin), maxX);
+            win.y = Math.min(Math.max(centeredY + offsetY, margin), maxY);
+            win.active = false;
+        }
+
+        const topWin = visibleWindows[visibleWindows.length - 1];
+        topWin.active = true;
+        topWin.zIndex = ++this._zCounter;
+
+        this.notify();
+    }
+
+    async toggleFullscreen() {
+        try {
+            if (document.fullscreenElement) {
+                await document.exitFullscreen();
+                return;
+            }
+
+            await document.documentElement.requestFullscreen();
+        }
+        catch (err) {
+            console.error("Failed to toggle fullscreen:", err);
+        }
     }
 }
