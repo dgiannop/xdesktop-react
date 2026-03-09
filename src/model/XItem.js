@@ -17,7 +17,8 @@ export class XItem {
         type = XItemType.ITEM,
         path = "",
         icon = "",
-        owner = XItemOwner.USER
+        owner = XItemOwner.USER,
+        content = ""
     ) {
         this.id = XItem._nextId++;
         this.title = title;
@@ -25,6 +26,7 @@ export class XItem {
         this.path = path;
         this.icon = icon;
         this.owner = owner;
+        this.content = content;
     }
 
     activate(desktop) {

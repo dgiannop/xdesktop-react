@@ -162,6 +162,14 @@ export default function XWindow({ win, desktop }) {
         window.removeEventListener("mouseup", handleResizeMouseUp);
     }
 
+    function handleTextChange(e) {
+        if (!win.fileItem)
+            return;
+
+        win.fileItem.content = e.target.value;
+        desktop.notify();
+    }
+
     function renderClient() {
         switch (win.type) {
             case XItemType.FOLDER:
@@ -178,6 +186,16 @@ export default function XWindow({ win, desktop }) {
                     <div className="xwindow-app-content">
                         {win.title}
                     </div>
+                );
+
+            case XItemType.ITEM:
+                return (
+                    <textarea
+                        className="xwindow-notepad"
+                        value={win.fileItem?.content ?? ""}
+                        onChange={handleTextChange}
+                        spellCheck={false}
+                    />
                 );
 
             default:

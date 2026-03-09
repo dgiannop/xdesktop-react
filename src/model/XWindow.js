@@ -27,6 +27,8 @@ export class XWindow {
         this.zIndex = 1;
 
         this.view = new XView([], "");
+
+        this.fileItem = null;
     }
 
     moveTo(x, y) {

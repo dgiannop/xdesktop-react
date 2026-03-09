@@ -35,12 +35,12 @@ export class XDesktop {
         this.windows = [];
 
         const documents = new XFolder("Documents", "Documents", "/images/Documents.png", XItemOwner.SYSTEM);
-        documents.addItem(new XItem("Notes.txt", XItemType.ITEM, "Documents/Notes.txt", "/images/Generic.png"));
-        documents.addItem(new XItem("Resume.txt", XItemType.ITEM, "Documents/Resume.txt", "/images/Generic.png"));
+        documents.addItem(new XItem("Notes.txt", XItemType.ITEM, "Documents/Notes.txt", "/images/file.svg", XItemOwner.USER, "These are some notes.\n"));
+        documents.addItem(new XItem("Resume.txt", XItemType.ITEM, "Documents/Resume.txt", "/images/file.svg", XItemOwner.USER, "Resume draft\n"));
 
         const pictures = new XFolder("Pictures", "Pictures", "/images/Pictures.png", XItemOwner.SYSTEM);
-        pictures.addItem(new XItem("Photo 1", XItemType.ITEM, "Pictures/Photo1", "/images/Generic.png"));
-        pictures.addItem(new XItem("Photo 2", XItemType.ITEM, "Pictures/Photo2", "/images/Generic.png"));
+        pictures.addItem(new XItem("Photo 1", XItemType.ITEM, "Pictures/Photo1", "/images/file.png"));
+        pictures.addItem(new XItem("Photo 2", XItemType.ITEM, "Pictures/Photo2", "/images/file.png"));
 
         const music = new XFolder("Music", "Music", "/images/Music.png", XItemOwner.SYSTEM);
         const videos = new XFolder("Videos", "Videos", "/images/Videos.png", XItemOwner.SYSTEM);
@@ -51,8 +51,9 @@ export class XDesktop {
         const trash = new XFolder("Trash", "Trash", "/images/trash.png", XItemOwner.SYSTEM);
 
         const applications = new XFolder("Applications", "Applications", "/images/Applications.png", XItemOwner.SYSTEM);
-        applications.addItem(new XItem("Calculator", XItemType.APP, "Applications/Calculator", "/images/react.png"));
-        applications.addItem(new XItem("Editor", XItemType.APP, "Applications/Editor", "/images/react.png"));
+        applications.addItem(new XItem("Calculator", XItemType.APP, "Applications/Calculator", "/images/react.svg"));
+        applications.addItem(new XItem("Editor", XItemType.APP, "Applications/Editor", "/images/react.svg"));
+        applications.addItem(new XItem("Notepad", XItemType.APP, "Applications/Notepad", "/images/notepad.png"));
 
         this.fs.addFolder(documents);
         this.fs.addFolder(pictures);
@@ -122,9 +123,29 @@ export class XDesktop {
                 this.openApp(item);
                 break;
 
+            case XItemType.ITEM:
+                this.openFile(item);
+                break;
+
             default:
                 break;
         }
+    }
+
+    openFile(item) {
+        const win = new XWindow(
+            item.title,
+            XItemType.ITEM,
+            "/images/notepad.png"
+        );
+
+        win.fileItem = item;
+        win.width = 520;
+        win.height = 360;
+        win.restoreWidth = win.width;
+        win.restoreHeight = win.height;
+
+        this.addWindow(win);
     }
 
     openFolder(item) {
@@ -143,7 +164,7 @@ export class XDesktop {
         const win = new XWindow(
             item.title,
             XItemType.APP,
-            item.icon || "/images/react.png"
+            item.icon || "/images/react.svg"
         );
 
         this.addWindow(win);
@@ -168,7 +189,7 @@ export class XDesktop {
 
     createFile(parentPath, name, icon = "/images/file.svg", owner = XItemOwner.USER) {
         const path = parentPath ? `${parentPath}/${name}` : name;
-        const item = new XItem(name, XItemType.ITEM, path, icon, owner);
+        const item = new XItem(name, XItemType.ITEM, path, icon, owner, "");
 
         if (!parentPath)
             this.view.items.push(item);
